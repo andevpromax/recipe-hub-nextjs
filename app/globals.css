@@ -1,6 +1,4 @@
-/* @import "tailwindcss";
-
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -40,4 +38,22 @@ html {
 body {
   margin: 0;
   background: radial-gradient(#282c34, #282c34);
+}
+
+@theme {
+  --animate-loading: loading 1.2s ease-in-out infinite;
+
+  @keyframes loading {
+    0% {
+      color: #e9e9e9;
+    }
+
+    50% {
+      color: #b89b84;
+    }
+
+    100% {
+      color: #e9e9e9;
+    }
+  }
 }
