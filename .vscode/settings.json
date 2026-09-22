@@ -23,5 +23,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "never",
     "source.fixAll.biome": "never"
-  }
+  },
+  "css.lint.unknownAtRules": "ignore"
 }

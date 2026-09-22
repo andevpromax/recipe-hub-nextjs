@@ -1,6 +1,13 @@
 import Link from 'next/link'
 import MealsGrid from '@/components/meals/meals-grid'
+import { getMeals } from '@/lib/meals'
+import { Suspense } from 'react'
 
+async function Meals() {
+  const meals = await getMeals()
+
+  return <MealsGrid meals={meals} />
+}
 function MealsPage() {
   return (
     <>
@@ -23,9 +30,10 @@ function MealsPage() {
           </Link>
         </p>
       </header>
-
       <main>
-        <MealsGrid meals={[]} />
+        <Suspense fallback={<p className="animate-loading text-center">Fetching meals...</p>}>
+          <Meals />
+        </Suspense>
       </main>
     </>
   )

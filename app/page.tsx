@@ -55,17 +55,5 @@ export default function Home() {
         </section>
       </main>
     </>
-    // <main>
-    //   <h1 className="text-center text-white text-4xl font-bold">Time to get started!</h1>
-    //   <p>
-    //     <Link href="/community">Community Page</Link>
-    //   </p>
-    //   <p>
-    //     <Link href="/meals">Meals Page</Link>
-    //   </p>
-    //   <p>
-    //     <Link href="/meals/share">Share Meal Page</Link>
-    //   </p>
-    // </main>
   )
 }
