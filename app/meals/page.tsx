@@ -8,6 +8,7 @@ async function Meals() {
 
   return <MealsGrid meals={meals} />
 }
+
 function MealsPage() {
   return (
     <>

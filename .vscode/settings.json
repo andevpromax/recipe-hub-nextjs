@@ -5,7 +5,8 @@
   "editor.tabSize": 2,
 
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "tailwindCSS.lint.cssConflict": "ignore"
   },
 
   "[javascriptreact]": {

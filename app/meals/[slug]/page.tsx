@@ -46,6 +46,12 @@ export default async function MealDetailsPage({ params }: { params: Promise<{ sl
         <p className="whitespace-pre-line animate-fade-slide-in-from-bottom mx-auto my-8 max-w-240 rounded-lg bg-[#6e6464] p-8 text-xl leading-normal text-[#13120f] shadow-[0_0_0.5rem_rgba(0,0,0,0.5)]">
           {meal.instructions}
         </p>
+        {/*
+            <p className="whitespace-pre-line animate-fade-slide-in-from-bottom mx-auto my-8 max-w-240 rounded-lg bg-[#6e6464] p-8 text-xl leading-normal text-[#13120f] shadow-[0_0_0.5rem_rgba(0,0,0,0.5)]">
+            dangerouslySetInnerHTML={{
+            __html: meal.instructions,
+          }}
+        ></p> */}
       </main>
     </>
   )
