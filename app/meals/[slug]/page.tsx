@@ -16,7 +16,7 @@ export default async function MealDetailsPage({ params }: { params: Promise<{ sl
       <header className="mx-auto flex max-w-7xl gap-12 px-4 py-8">
         <div className="relative h-80 w-120">
           <Image
-            src={meal.image}
+            src={`https://andriipositko-nextjs-recipe-images.s3.eu-north-1.amazonaws.com/${meal.image}`}
             alt={meal.title}
             fill
             className="animate-fade-slide-in-from-left rounded-lg object-cover shadow-[0_0_0.5rem_rgba(0,0,0,0.5)]"

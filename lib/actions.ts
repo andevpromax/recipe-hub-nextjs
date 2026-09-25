@@ -1,6 +1,7 @@
 'use server'
 
 import { saveMeal } from '@/lib/meals'
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
@@ -48,6 +49,7 @@ export async function shareMeal(
   }
 
   await saveMeal(result.data)
+  revalidatePath('/meals', 'page')
   redirect('/meals')
 }
 

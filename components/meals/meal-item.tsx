@@ -1,13 +1,25 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import type { Meal } from './types'
+import type { Meal } from '@/types/meal'
 
-function MealItem({ title, slug, image, summary, creator }: Meal) {
+type MealItemProps = Meal & {
+  eager?: boolean
+}
+
+function MealItem({ title, slug, image, summary, creator, eager }: MealItemProps) {
+  console.log('image', image)
   return (
     <article className="flex h-full flex-col justify-between overflow-hidden rounded-sm bg-linear-to-r from-[#2c1e19] to-[#25200f] text-[#ddd6cb] shadow-[0_0_12px_rgba(0,0,0,0.3)] transition-all duration-300 ease-in-out">
       <header>
         <div className="relative h-60">
-          <Image src={image} alt={title} fill className="object-cover" />
+          <Image
+            src={`https://andriipositko-nextjs-recipe-images.s3.eu-north-1.amazonaws.com/${image}`}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+            loading={eager ? 'eager' : 'lazy'}
+          />
         </div>
 
         <div className="px-4 pt-2">
