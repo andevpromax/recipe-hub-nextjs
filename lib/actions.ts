@@ -2,18 +2,52 @@
 
 import { saveMeal } from '@/lib/meals'
 import { redirect } from 'next/navigation'
+import { z } from 'zod'
 
-export async function shareMeal(formData: FormData) {
-  const meal = {
+const mealSchema = z.object({
+  title: z.string().trim().min(1, 'Title is required!'),
+  summary: z.string().trim().min(1, 'Summary is required'),
+  instructions: z.string().trim().min(1, 'Instructions are required'),
+  creator: z.string().trim().min(1, 'Name is required'),
+  creator_email: z.email('Invalid email'),
+  image: z.instanceof(File),
+})
+
+type ShareMealState = {
+  errors: {
+    title?: string[]
+    summary?: string[]
+    instructions?: string[]
+    creator?: string[]
+    creator_email?: string[]
+    image?: string[]
+  }
+}
+
+export async function shareMeal(
+  prevState: ShareMealState,
+  formData: FormData,
+): Promise<ShareMealState> {
+  const rawMeal = {
     title: getString(formData, 'title'),
     summary: getString(formData, 'summary'),
     instructions: getString(formData, 'instructions'),
-    image: formData.get('image') as File,
-    creator: getString(formData, 'creator'),
-    creator_email: getString(formData, 'creator_email'),
+    image: formData.get('image'),
+    creator: getString(formData, 'name'),
+    creator_email: getString(formData, 'email'),
   }
 
-  await saveMeal(meal)
+  const result = mealSchema.safeParse(rawMeal)
+
+  if (!result.success) {
+    const errors = z.flattenError(result.error).fieldErrors
+
+    return {
+      errors,
+    }
+  }
+
+  await saveMeal(result.data)
   redirect('/meals')
 }
 

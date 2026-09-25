@@ -1,7 +1,15 @@
+'use client'
+
 import ImagePicker from '@/components/meals/image-picker'
 import { shareMeal } from '@/lib/actions'
+import MealsFormSubmitButton from '@/components/meals/meals-form-submit'
+import { useActionState } from 'react'
 
 export default function ShareMealPage() {
+  const [state, formAction] = useActionState(shareMeal, {
+    errors: {},
+  })
+
   return (
     <>
       <header className="mx-auto mt-12 mb-20 w-[90%] max-w-300 text-2xl text-[#ddd6cb]">
@@ -16,9 +24,9 @@ export default function ShareMealPage() {
       </header>
 
       <main className="mx-auto my-12 w-[90%] max-w-300">
-        <form className="max-w-200" action={shareMeal}>
+        <form className="max-w-200" action={formAction}>
           <div className="flex gap-4">
-            <p className="w-full">
+            <div className="w-full">
               <label
                 htmlFor="name"
                 className="mb-2 block font-['Montserrat'] text-base font-bold text-[#b3aea5] uppercase"
@@ -33,9 +41,12 @@ export default function ShareMealPage() {
                 required
                 className="block w-full rounded-sm border border-[#454952] bg-[#1c2027] px-4 py-2 font-['Montserrat'] text-xl text-[#ddd6cb] focus:bg-[#1f252d] focus:outline-[#f99f2a]"
               />
-            </p>
+              {state.errors?.creator && (
+                <p className="mt-1 text-sm font-medium text-red-400">{state.errors.creator[0]}</p>
+              )}
+            </div>
 
-            <p className="w-full">
+            <div className="w-full">
               <label
                 htmlFor="email"
                 className="mb-2 block font-['Montserrat'] text-base font-bold text-[#b3aea5] uppercase"
@@ -50,9 +61,14 @@ export default function ShareMealPage() {
                 required
                 className="block w-full rounded-sm border border-[#454952] bg-[#1c2027] px-4 py-2 font-['Montserrat'] text-xl text-[#ddd6cb] focus:bg-[#1f252d] focus:outline-[#f99f2a]"
               />
-            </p>
+              {state.errors?.creator_email && (
+                <p className="mt-1 text-sm font-medium text-red-400">
+                  {state.errors.creator_email[0]}
+                </p>
+              )}
+            </div>
           </div>
-          <p>
+          <div>
             <label
               htmlFor="title"
               className="mb-2 block font-['Montserrat'] text-base font-bold text-[#b3aea5] uppercase"
@@ -67,8 +83,11 @@ export default function ShareMealPage() {
               required
               className="block w-full rounded-sm border border-[#454952] bg-[#1c2027] px-4 py-2 font-['Montserrat'] text-xl text-[#ddd6cb] focus:bg-[#1f252d] focus:outline-[#f99f2a]"
             />
-          </p>
-          <p>
+            {state.errors?.title && (
+              <p className="mt-1 text-sm font-medium text-red-400">{state.errors.title[0]}</p>
+            )}
+          </div>
+          <div>
             <label
               htmlFor="summary"
               className="mb-2 block font-['Montserrat'] text-base font-bold text-[#b3aea5] uppercase"
@@ -83,8 +102,11 @@ export default function ShareMealPage() {
               required
               className="block w-full rounded-sm border border-[#454952] bg-[#1c2027] px-4 py-2 font-['Montserrat'] text-xl text-[#ddd6cb] focus:bg-[#1f252d] focus:outline-[#f99f2a]"
             />
-          </p>
-          <p>
+            {state.errors?.summary && (
+              <p className="mt-1 text-sm font-medium text-red-400">{state.errors.summary[0]}</p>
+            )}
+          </div>
+          <div>
             <label
               htmlFor="instructions"
               className="mb-2 block font-['Montserrat'] text-base font-bold text-[#b3aea5] uppercase"
@@ -99,15 +121,15 @@ export default function ShareMealPage() {
               required
               className="block w-full rounded-sm border border-[#454952] bg-[#1c2027] px-4 py-2 font-['Montserrat'] text-xl text-[#ddd6cb] focus:bg-[#1f252d] focus:outline-[#f99f2a]"
             />
-          </p>
+            {state.errors?.instructions && (
+              <p className="mt-1 text-sm font-medium text-red-400">
+                {state.errors.instructions[0]}
+              </p>
+            )}
+          </div>
           <ImagePicker label="Your image" name="image" />
           <p className="text-right">
-            <button
-              type="submit"
-              className="cursor-pointer rounded-xs border-0 bg-linear-to-r from-[#f9572a] to-[#ff9b05] px-8 py-3 text-xl text-white shadow-[0_2px_5px_rgba(0,0,0,0.3)] hover:from-[#fd4715] hover:to-[#f9b241] focus:from-[#fd4715] focus:to-[#f9b241]"
-            >
-              Share Meal
-            </button>
+            <MealsFormSubmitButton />
           </p>
         </form>
       </main>

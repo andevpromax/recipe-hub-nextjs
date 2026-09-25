@@ -17,7 +17,7 @@ export function getMeal(slug: string) {
 }
 
 export async function saveMeal(meal: NewMeal) {
-  const slug = slugify(meal.title, { lower: true })
+  const slug = createUniqueSlug(meal.title)
   const instructions = xss(meal.instructions)
 
   const extension = meal.image.name.split('.').pop()
@@ -54,4 +54,24 @@ export async function saveMeal(meal: NewMeal) {
     )
   `,
   ).run(mealToSave)
+}
+
+function createUniqueSlug(title: string) {
+  const baseSlug = slugify(title, { lower: true })
+
+  const existingSlug = db.prepare('SELECT 1 FROM meals WHERE slug = ?').get(baseSlug)
+
+  if (!existingSlug) {
+    return baseSlug
+  }
+
+  let counter = 2
+  let slug = `${baseSlug}-${counter}`
+
+  while (db.prepare('SELECT 1 FROM meals WHERE slug = ?').get(slug)) {
+    counter++
+    slug = `${baseSlug}-${counter}`
+  }
+
+  return slug
 }
