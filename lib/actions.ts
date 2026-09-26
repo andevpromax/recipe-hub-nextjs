@@ -4,6 +4,7 @@ import { saveMeal } from '@/lib/meals'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { revalidateTag } from 'next/cache'
 
 const mealSchema = z.object({
   title: z.string().trim().min(1, 'Title is required!'),
@@ -61,4 +62,8 @@ function getString(formData: FormData, key: string) {
   }
 
   return value
+}
+
+export async function revalidateMealsTag() {
+  revalidateTag('meals', 'max')
 }
