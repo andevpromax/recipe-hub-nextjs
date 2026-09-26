@@ -5,13 +5,8 @@ import logoImg from '@/assets/logo.png'
 import Image from 'next/image'
 import MainHeaderBackground from './main-header-background'
 import NavLink from '@/components/main-header/nav-link'
-import { usePathname } from 'next/navigation'
 
 function MainHeader() {
-  const path = usePathname()
-
-  console.log('path', path)
-
   return (
     <>
       <MainHeaderBackground />
