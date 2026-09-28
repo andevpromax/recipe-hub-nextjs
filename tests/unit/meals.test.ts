@@ -1,27 +1,31 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
-import { getMeal, getMeals, saveMeal } from '@/lib/meals'
+import { getMeal, getMeals, saveMeal, deleteMeal } from '@/lib/meals'
 import type { NewMeal } from '@/types/meal'
 
-const { getMock, allMock, runMock, putObjectMock, prepareMock } = vi.hoisted(() => {
-  const getMock = vi.fn()
-  const allMock = vi.fn()
-  const runMock = vi.fn()
-  const putObjectMock = vi.fn()
+const { getMock, allMock, runMock, putObjectMock, prepareMock, deleteObjectMock } = vi.hoisted(
+  () => {
+    const getMock = vi.fn()
+    const allMock = vi.fn()
+    const runMock = vi.fn()
+    const putObjectMock = vi.fn()
+    const deleteObjectMock = vi.fn()
 
-  const prepareMock = vi.fn(() => ({
-    get: getMock,
-    all: allMock,
-    run: runMock,
-  }))
+    const prepareMock = vi.fn(() => ({
+      get: getMock,
+      all: allMock,
+      run: runMock,
+    }))
 
-  return {
-    getMock,
-    prepareMock,
-    allMock,
-    runMock,
-    putObjectMock,
-  }
-})
+    return {
+      getMock,
+      prepareMock,
+      allMock,
+      runMock,
+      putObjectMock,
+      deleteObjectMock,
+    }
+  },
+)
 
 vi.mock('better-sqlite3', () => ({
   default: vi.fn(() => ({
@@ -32,6 +36,7 @@ vi.mock('better-sqlite3', () => ({
 vi.mock('@aws-sdk/client-s3', () => ({
   S3: class {
     putObject = putObjectMock
+    deleteObject = deleteObjectMock
   },
 }))
 
@@ -43,6 +48,7 @@ beforeEach(() => {
   vi.clearAllMocks()
 
   putObjectMock.mockResolvedValue({})
+  deleteObjectMock.mockResolvedValue({})
 })
 
 afterEach(() => {
@@ -227,5 +233,38 @@ describe('saveMeal', () => {
     await expect(saveMeal(mockMeal)).rejects.toThrow('S3 upload failed')
 
     expect(runMock).not.toHaveBeenCalled()
+  })
+
+  it('should delete meal from database and S3', async () => {
+    getMock.mockReturnValue({
+      id: 1,
+      slug: 'burger',
+      title: 'Burger',
+      summary: 'Delicious burger',
+      instructions: 'Cook it',
+      creator: 'Andrii',
+      creator_email: 'andrii@example.com',
+      image: 'burger.jpg',
+    })
+
+    await deleteMeal('burger')
+
+    expect(prepareMock).toHaveBeenCalledWith('DELETE FROM meals WHERE slug = ?')
+
+    expect(runMock).toHaveBeenCalledWith('burger')
+
+    expect(deleteObjectMock).toHaveBeenCalledWith({
+      Bucket: 'andriipositko-nextjs-recipe-images',
+      Key: 'burger.jpg',
+    })
+  })
+
+  it('should throw an error if meal does not exist', async () => {
+    getMock.mockReturnValue(undefined)
+
+    await expect(deleteMeal('missing-meal')).rejects.toThrow('Meal not found')
+
+    expect(runMock).not.toHaveBeenCalled()
+    expect(deleteObjectMock).not.toHaveBeenCalled()
   })
 })
