@@ -30,8 +30,6 @@ export async function shareMeal(
   prevState: ShareMealState,
   formData: FormData,
 ): Promise<ShareMealState> {
-  console.log('1. shareMeal started')
-
   const rawMeal = {
     title: getString(formData, 'title'),
     summary: getString(formData, 'summary'),
@@ -44,22 +42,15 @@ export async function shareMeal(
   const result = mealSchema.safeParse(rawMeal)
 
   if (!result.success) {
-    console.log('2. validation failed')
     const errors = z.flattenError(result.error).fieldErrors
 
     return {
       errors,
     }
   }
-  console.log('2. validation passed')
 
   await saveMeal(result.data)
-
-  console.log('3. meal saved')
-
   revalidatePath('/meals', 'page')
-
-  console.log('4. path revalidated')
   redirect('/meals')
 }
 
