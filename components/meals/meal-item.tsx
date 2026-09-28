@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Meal } from '@/types/meal'
+import { deleteMealAction } from '@/lib/actions'
+import DeleteMealButton from '@/components/meals/meal-delete-button'
 
 type MealItemProps = Meal & {
   eager?: boolean
 }
 
 function MealItem({ title, slug, image, summary, creator, eager }: MealItemProps) {
-  console.log('image', image)
   return (
     <article className="flex h-full flex-col justify-between overflow-hidden rounded-sm bg-linear-to-r from-[#2c1e19] to-[#25200f] text-[#ddd6cb] shadow-[0_0_12px_rgba(0,0,0,0.3)] transition-all duration-300 ease-in-out">
       <header>
@@ -32,7 +33,13 @@ function MealItem({ title, slug, image, summary, creator, eager }: MealItemProps
       <div className="flex h-full flex-col justify-between">
         <p className="m-0 px-4 pt-4">{summary}</p>
 
-        <div className="p-4 text-right">
+        <div className="flex justify-between items-baseline p-4 text-right">
+          <form action={deleteMealAction}>
+            <input type="hidden" name="slug" value={slug} />
+
+            <DeleteMealButton />
+          </form>
+
           <Link
             href={`/meals/${slug}`}
             className="mt-4 inline-block rounded-lg bg-linear-to-r from-[#f9572a] to-[#ff9b05] px-4 py-2 font-bold text-white no-underline hover:from-[#fd4715] hover:to-[#f9b241] hover:shadow-[0_0_12px_rgba(242,100,18,0.8)]"

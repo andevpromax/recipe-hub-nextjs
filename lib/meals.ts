@@ -81,6 +81,21 @@ function createUniqueSlug(title: string) {
   return slug
 }
 
+export async function deleteMeal(slug: string) {
+  const meal = getMeal(slug)
+
+  if (!meal) {
+    throw new Error('Meal not found')
+  }
+
+  db.prepare('DELETE FROM meals WHERE slug = ?').run(slug)
+
+  await s3.deleteObject({
+    Bucket: 'andriipositko-nextjs-recipe-images',
+    Key: meal.image,
+  })
+}
+
 //! Store the image to the public folder
 // export async function saveMeal(meal: NewMeal) {
 //   const slug = createUniqueSlug(meal.title)
