@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const testimonials = ['Great product!', 'Very easy to use!', 'Amazing support!', 'Would recommend!']
 
