@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run db:init",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run db:init && next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest",

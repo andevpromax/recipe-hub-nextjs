@@ -1,6 +1,5 @@
-import sql from 'better-sqlite3'
-
-const db = sql('meals.db')
+const dbPath = process.env.DATABASE_PATH ?? 'meals.db'
+const db = sql(dbPath)
 
 db.prepare(
   `

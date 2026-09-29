@@ -1,5 +1,4 @@
-import sql from 'better-sqlite3'
-const db = sql('meals.db')
+import db from '@/lib/db'
 
 const dummyMeals = [
   {

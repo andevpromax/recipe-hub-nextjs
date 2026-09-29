@@ -1,14 +1,12 @@
-import sql from 'better-sqlite3'
 import slugify from 'slugify'
 import xss from 'xss'
 import { NewMeal, Meal } from '@/types/meal'
 import { S3 } from '@aws-sdk/client-s3'
+import db from '@/lib/db'
 
 const s3 = new S3({
   region: 'eu-north-1',
 })
-
-const db = sql('meals.db')
 
 export async function getMeals(): Promise<Meal[]> {
   await new Promise((resolve) => setTimeout(resolve, 2000))

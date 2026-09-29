@@ -1,7 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { Meal } from '@/types/meal'
-import sql from 'better-sqlite3'
-const db = sql('meals.db')
+import db from '@/lib/db'
 
 export const getCachedMeals = unstable_cache(
   async () => {
