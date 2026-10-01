@@ -1,10 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
 import { shareMeal } from '@/lib/actions'
 
-const { saveMealMock, revalidatePathMock, redirectMock } = vi.hoisted(() => ({
+const { saveMealMock, updateTagMock, redirectMock } = vi.hoisted(() => ({
   saveMealMock: vi.fn(),
-  revalidatePathMock: vi.fn(),
+  updateTagMock: vi.fn(),
   redirectMock: vi.fn(),
 }))
 
@@ -12,9 +11,13 @@ vi.mock('@/lib/meals', () => ({
   saveMeal: saveMealMock,
 }))
 
+// vi.mock('next/cache', () => ({
+//   revalidatePath: revalidatePathMock,
+//   revalidateTag: vi.fn(),
+// }))
+
 vi.mock('next/cache', () => ({
-  revalidatePath: revalidatePathMock,
-  revalidateTag: vi.fn(),
+  updateTag: updateTagMock,
 }))
 
 vi.mock('next/navigation', () => ({
@@ -90,7 +93,8 @@ describe('shareMeal', () => {
       image,
     })
 
-    expect(revalidatePathMock).toHaveBeenCalledWith('/meals', 'page')
+    // expect(revalidatePathMock).toHaveBeenCalledWith('/meals', 'page')
+    expect(updateTagMock).toHaveBeenCalledWith('meals')
 
     expect(redirectMock).toHaveBeenCalledWith('/meals')
   })

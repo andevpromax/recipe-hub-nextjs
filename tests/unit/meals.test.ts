@@ -2,6 +2,14 @@ import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
 import { getMeal, getMeals, saveMeal, deleteMeal } from '@/lib/meals'
 import type { NewMeal } from '@/types/meal'
 
+const { cacheTagMock } = vi.hoisted(() => ({
+  cacheTagMock: vi.fn(),
+}))
+
+vi.mock('next/cache', () => ({
+  cacheTag: cacheTagMock,
+}))
+
 const { getMock, allMock, runMock, putObjectMock, prepareMock, deleteObjectMock } = vi.hoisted(
   () => {
     const getMock = vi.fn()
