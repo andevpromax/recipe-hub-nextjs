@@ -2,6 +2,7 @@ import Link from 'next/link'
 import MealsGrid from '@/components/meals/meals-grid'
 import { getMeals } from '@/lib/meals'
 import { Suspense } from 'react'
+import { io } from 'next/cache'
 
 export const metadata = {
   title: 'All Meals',
@@ -9,6 +10,8 @@ export const metadata = {
 }
 
 async function Meals() {
+  await io()
+
   const meals = await getMeals()
 
   return <MealsGrid meals={meals} />
