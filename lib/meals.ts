@@ -32,6 +32,12 @@ export async function saveMeal(meal: NewMeal) {
 
   const bufferedImage = await meal.image.arrayBuffer()
 
+  console.log('AWS ENV IN NEXT:', {
+    accessKey: Boolean(process.env.AWS_ACCESS_KEY_ID),
+    secretKey: Boolean(process.env.AWS_SECRET_ACCESS_KEY),
+    region: process.env.AWS_REGION,
+  })
+
   await s3.putObject({
     Bucket: 'andriipositko-nextjs-recipe-images',
     Key: fileName,
