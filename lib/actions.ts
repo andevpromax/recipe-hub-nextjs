@@ -80,5 +80,6 @@ export async function deleteMealAction(formData: FormData) {
 
   updateTag('meals')
 
+  //! Use updateTag instead revalidatePath
   // revalidatePath('/meals', 'page')
 }
