@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 import { getMeal } from '@/lib/meals'
 
@@ -16,7 +17,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: meal.summary,
   }
 }
-export default async function MealDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
+
+type MealDetailsPageProps = {
+  params: Promise<{ slug: string }>
+}
+
+export default function MealDetailsPage({ params }: MealDetailsPageProps) {
+  return (
+    <Suspense fallback={<p>Loading meal...</p>}>
+      <MealDetails params={params} />
+    </Suspense>
+  )
+}
+
+async function MealDetails({ params }: MealDetailsPageProps) {
   const { slug } = await params
   const meal = getMeal(slug)
 
