@@ -3,12 +3,17 @@ import xss from 'xss'
 import { NewMeal, Meal } from '@/types/meal'
 import { S3 } from '@aws-sdk/client-s3'
 import db from '@/lib/db'
+import { cacheTag } from 'next/cache'
 
 const s3 = new S3({
   region: 'eu-north-1',
 })
 
 export async function getMeals(): Promise<Meal[]> {
+  'use cache'
+
+  cacheTag('meals')
+
   await new Promise((resolve) => setTimeout(resolve, 2000))
 
   return db.prepare('SELECT * FROM meals').all() as Meal[]

@@ -1,10 +1,9 @@
 'use server'
 
 import { saveMeal, deleteMeal } from '@/lib/meals'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, updateTag, revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
-import { revalidateTag } from 'next/cache'
 
 const mealSchema = z.object({
   title: z.string().trim().min(1, 'Title is required!'),
@@ -50,7 +49,9 @@ export async function shareMeal(
   }
 
   await saveMeal(result.data)
-  revalidatePath('/meals', 'page')
+  updateTag('meals')
+
+  // revalidatePath('/meals', 'page')
   redirect('/meals')
 }
 
@@ -77,5 +78,7 @@ export async function deleteMealAction(formData: FormData) {
 
   await deleteMeal(slug)
 
-  revalidatePath('/meals', 'page')
+  updateTag('meals')
+
+  // revalidatePath('/meals', 'page')
 }
